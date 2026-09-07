@@ -1,0 +1,2 @@
+"""Adversarial RAG evidence gateway."""
+
