@@ -1,0 +1,7 @@
+# Build log
+
+- **What broke:** The first deterministic execution harness tried to launch unittest through a subprocess and imported SQLite. The isolated runner blocks both capabilities and class construction, so execution stopped before tests. The implementation was simplified to a functional core and the store redesigned as a single atomic JSON journal per run and the tests as a dependency-free executable suite.
+- **What I learned:** Durable orchestration does not require a heavyweight framework, but its exact guarantees must be explicit. Atomic replacement gives consistent single-writer state; idempotent external effects still depend on stable keys, and multi-worker deployment requires a database lease or compare-and-swap claim.
+- **Evidence:** `PYTHONPATH=src python tests/test_orchestrator.py` logic executed in an isolated Python runner: `PASS` for all 5 test groups (completion/replay, idempotent resume, budgets, schemas, and tamper detection).
+- **Likely failure points:** non-idempotent external APIs, planner output that bypasses schemas, retrying ambiguous tool outcomes with a new key, run IDs reused for different tasks, concurrent workers advancing one step, trace payloads that are not canonical, unbounded tool loops, and treating local atomic writes as distributed exactly-once guarantees.
+- **Next skill:** Expose the safe research tools through MCP with capability-scoped authorization, per-tool approvals, and protocol conformance tests.

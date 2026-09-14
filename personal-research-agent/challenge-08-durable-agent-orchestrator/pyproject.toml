@@ -1,0 +1,13 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "research-agent-orchestrator"
+version = "0.8.0"
+description = "Durable budgeted orchestration with idempotent tools and replayable traces"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/research_agent"]
